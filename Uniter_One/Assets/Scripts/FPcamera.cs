@@ -26,4 +26,4 @@ public class FPcamera : MonoBehaviour
         player.Rotate(Vector3.up * mouseX);
 
     }
-}
+    }
