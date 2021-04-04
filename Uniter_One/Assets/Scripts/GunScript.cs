@@ -10,7 +10,7 @@ public class GunScript : MonoBehaviour
     public Camera fpCam;
     public ParticleSystem fireLight;
     public GameObject shootLight;
-    private float fireTime = 0f;
+    private float _fireTime = 0f;
 
     void Start()
     {
@@ -20,11 +20,9 @@ public class GunScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButton("Fire1") && (Time.time >= fireTime))
-        {
-            fireTime = Time.time + 1f / fireRate;
-            Shoot();
-        }
+        if (!Input.GetButton("Fire1") || (!(Time.time >= _fireTime))) return;
+        _fireTime = Time.time + 1f / fireRate;
+        Shoot();
     }
     void Shoot()
     {

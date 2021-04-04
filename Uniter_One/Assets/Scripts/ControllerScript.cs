@@ -13,9 +13,9 @@ public class ControllerScript : MonoBehaviour
     public float jumpHeight = 10;
 
 
-    Vector3 gravityVelocity;
-    Vector3 gravityDirection = new Vector3(0, -1, 0);
-    bool isGrounded;
+    private Vector3 gravityVelocity;
+    private Vector3 gravityDirection = new Vector3(0, -1, 0);
+    private bool isGrounded;
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +35,9 @@ public class ControllerScript : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
+        var transform1 = transform;
+        Vector3 move = transform1.right * x + transform1.forward * z;
+        controller.Move(speed  *  Time.deltaTime*move);
     }
     bool checkGravity(Vector3 velocity, Vector3 dir)
     {
@@ -52,7 +53,7 @@ public class ControllerScript : MonoBehaviour
         {
             gravityVelocity = gravityDirection * 3;
         }
-        gravityVelocity += gravityDirection * gravity * Time.deltaTime;
+        gravityVelocity +=   gravity * Time.deltaTime*gravityDirection;
         controller.Move(gravityVelocity * Time.deltaTime);
 
     }
