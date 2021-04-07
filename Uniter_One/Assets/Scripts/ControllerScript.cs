@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ControllerScript : MonoBehaviour
-{
+{   
     public CharacterController controller;
     public Transform groundCheck;
     public float gravity = 20f;
@@ -12,7 +12,7 @@ public class ControllerScript : MonoBehaviour
     public float speed = 12f;
     public float jumpHeight = 10;
 
-
+    
     private Vector3 gravityVelocity;
     private Vector3 gravityDirection = new Vector3(0, -1, 0);
     private bool isGrounded;
@@ -30,6 +30,33 @@ public class ControllerScript : MonoBehaviour
         Gravity();
         Jump();
  
+    }
+
+    public void Place(bool[,,] points,Transform generatorPoint,int scale,GameObject cube)
+    {
+        Debug.Log(transform.position);
+        Debug.Log(generatorPoint.position);
+        int xPos = (int)(transform.position.x-generatorPoint.position.x+(float)scale/2)/scale;
+        int yPos = (int)(transform.position.y-generatorPoint.position.y+(float)scale/2)/scale;
+        int zPos = (int)(transform.position.z-generatorPoint.position.z+(float)scale/2)/scale;
+        Debug.Log(xPos+" "+yPos+ ' '+zPos);
+        int shift = 0;
+        while (!points[xPos, yPos, zPos])
+        {
+            shift++;
+            yPos++;
+        }
+        Blink(transform.position + new Vector3(0, shift*scale, 0));
+        if (yPos == 0 || points[xPos, yPos - 1, zPos])
+            Instantiate(cube, new Vector3(
+                xPos*scale+generatorPoint.position.x, 
+                (yPos - 1)*scale+generatorPoint.position.y,
+                zPos*scale+generatorPoint.position.z)
+                ,Quaternion.identity,generatorPoint);
+            
+        Debug.Log(shift);
+        
+
     }
     void Move()
     {

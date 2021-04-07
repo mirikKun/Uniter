@@ -30,7 +30,6 @@ public class GunScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpCam.transform.position, fpCam.transform.forward, out hit, range))
         {
-            Debug.Log(hit.transform.name);
             GameObject shoot=   Instantiate(shootLight, hit.point, Quaternion.LookRotation(hit.normal));            
             Destroy(shoot, 2);
         }

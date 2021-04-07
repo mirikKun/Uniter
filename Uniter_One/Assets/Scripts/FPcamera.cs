@@ -26,4 +26,10 @@ public class FPcamera : MonoBehaviour
         player.Rotate(Vector3.up * mouseX);
 
     }
+
+    public void CameraSwitch()
+    {
+        float ySwitch = transform.eulerAngles.x;
+        transform.localRotation = Quaternion.Euler(-ySwitch, 0f, 0f);
+    }
     }
