@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerScript : MonoBehaviour
-{   
-    public CharacterController controller;
+public class FpMovement : MonoBehaviour
+{
+     public CharacterController controller;
     public Transform groundCheck;
     public float gravity = 20f;
     public LayerMask groundMasc;

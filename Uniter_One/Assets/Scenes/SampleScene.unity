@@ -284,7 +284,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 2766aafa85873c04abeef722d89c4cf3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2766aafa85873c04abeef722d89c4cf3, type: 3}
@@ -314,10 +314,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
-  hookTip: {fileID: 0}
-  fpCamera: {fileID: 0}
-  player: {fileID: 0}
+    m_Bits: 256
+  hookTip: {fileID: 1656790727}
+  fpCamera: {fileID: 963194228}
+  player: {fileID: 2146696318}
   maxDist: 100
 --- !u!120 &29164258
 LineRenderer:
@@ -337,7 +337,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -363,7 +363,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.7
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -6276,7 +6276,7 @@ MonoBehaviour:
   shootLight: {fileID: 2152187399290581361, guid: ff653e826e4dfc84890edb0bc712705e,
     type: 3}
   player: {fileID: 2146696318}
-  FpCamera: {fileID: 963194228}
+  fpCamera: {fileID: 963194228}
   blinkNear: 1
   currentGravity: {x: 0, y: -1, z: 0}
 --- !u!1001 &1461075359
@@ -6383,6 +6383,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1656790726
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1656790727}
+  m_Layer: 0
+  m_Name: Tip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1656790727
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656790726}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.083, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 29164255}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1689906301
 GameObject:
@@ -6546,7 +6576,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 340c2264169aebb4d921610e621e0093,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 340c2264169aebb4d921610e621e0093, type: 3}
@@ -11603,8 +11633,9 @@ GameObject:
   - component: {fileID: 2146696318}
   - component: {fileID: 2146696317}
   - component: {fileID: 2146696316}
-  - component: {fileID: 2146696315}
-  - component: {fileID: 2146696319}
+  - component: {fileID: 2146696321}
+  - component: {fileID: 2146696322}
+  - component: {fileID: 2146696320}
   m_Layer: 0
   m_Name: FPCharacter
   m_TagString: Untagged
@@ -11612,24 +11643,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!143 &2146696315
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2146696314}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1
-  m_Radius: 1
-  m_SlopeLimit: 45
-  m_StepOffset: 0
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &2146696316
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11694,7 +11707,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2146696319
+--- !u!54 &2146696320
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146696314}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 112
+  m_CollisionDetection: 1
+--- !u!136 &2146696321
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146696314}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2146696322
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11703,18 +11746,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 2146696314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f45deffab456e6040987733530ce1b9b, type: 3}
+  m_Script: {fileID: 11500000, guid: 46b9d5f8c7fa194468e72c98adc5cfc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 2146696315}
+  rb: {fileID: 2146696320}
   groundCheck: {fileID: 1785563151}
-  gravity: 30
+  gravity: 300
   groundMasc:
     serializedVersion: 2
     m_Bits: 256
   groundDistance: 0.5
-  speed: 12
-  jumpHeight: 10
+  speed: 500
+  jumpHeight: 450
 --- !u!1001 &5181556803005298622
 PrefabInstance:
   m_ObjectHideFlags: 0

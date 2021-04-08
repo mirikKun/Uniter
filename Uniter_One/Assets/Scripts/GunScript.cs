@@ -14,7 +14,6 @@ public class GunScript : MonoBehaviour
 
     void Start()
     {
-
     }
 
 
@@ -24,13 +23,14 @@ public class GunScript : MonoBehaviour
         _fireTime = Time.time + 1f / fireRate;
         Shoot();
     }
+
     void Shoot()
     {
         fireLight.Play();
         RaycastHit hit;
         if (Physics.Raycast(fpCam.transform.position, fpCam.transform.forward, out hit, range))
         {
-            GameObject shoot=   Instantiate(shootLight, hit.point, Quaternion.LookRotation(hit.normal));            
+            GameObject shoot = Instantiate(shootLight, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(shoot, 2);
         }
     }

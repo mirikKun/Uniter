@@ -5,38 +5,40 @@ using UnityEngine;
 
 public class Perlin3D : MonoBehaviour
 {
-    public  int xSize = 20;
-    public  int ySize = 20;
-    public  int zSize = 20;
+    public int xSize = 20;
+    public int ySize = 20;
+    public int zSize = 20;
     public float multiplyIn = 1;
     public float bounce = 0.5f;
     [Range(0, 9999)] public int offset = 0;
-    
+
 
     public GameObject cube;
     public int cubeScale = 5;
-    
+
     public bool lightEvalable = true;
     public int lightPeriod = 13;
 
     public GameObject lightCube;
     public Material material;
-    
+
 
     public GameObject player;
+
     // Start is called before the first frame update
     void Start()
     {
         CreateRoom();
     }
+
     void PutCharacter(bool[,,] busy)
     {
-        player.GetComponent<ControllerScript>().Place(busy,transform,cubeScale,cube);
-    }
+        player.GetComponent<FpMovementRigid>().Place(busy, transform, cubeScale, cube);
+    } 
+
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     void CreateRoom()
@@ -44,7 +46,7 @@ public class Perlin3D : MonoBehaviour
         List<CombineInstance> combine = new List<CombineInstance>();
 
         MeshFilter blockMesh = Instantiate(cube, Vector3.zero, Quaternion.identity).GetComponent<MeshFilter>();
-        bool[,,] busy = new bool[xSize,ySize,zSize];
+        bool[,,] busy = new bool[xSize, ySize, zSize];
         for (int x = 0, i = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++)
@@ -73,6 +75,7 @@ public class Perlin3D : MonoBehaviour
                 }
             }
         }
+
         //  Destroy(blockMesh);
         List<List<CombineInstance>> combineList = new List<List<CombineInstance>>();
         int vertexCount = 0;
@@ -107,11 +110,11 @@ public class Perlin3D : MonoBehaviour
             mf.mesh.CombineMeshes(list.ToArray());
             g.AddComponent<MeshCollider>();
             g.isStatic = true;
-        } 
-        
+        }
+
         PutCharacter(busy);
     }
-    
+
     float PerlinNoise3D(float x, float y, float z)
     {
         float xy = Mathf.PerlinNoise(x, y);
