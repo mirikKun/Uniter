@@ -363,7 +363,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.7
+    widthMultiplier: 0.3
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -6151,7 +6151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6573f48f92e2d2d46b201596bfe0065b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensivity: 100
+  mouseSensivity: 80
   player: {fileID: 2146696318}
   ivertion: -1
 --- !u!1 &1295682444
@@ -11751,13 +11751,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 2146696320}
   groundCheck: {fileID: 1785563151}
-  gravity: 300
+  gravity: 1500
   groundMasc:
     serializedVersion: 2
     m_Bits: 256
   groundDistance: 0.5
   speed: 500
   jumpHeight: 450
+  grapling: 0
 --- !u!1001 &5181556803005298622
 PrefabInstance:
   m_ObjectHideFlags: 0

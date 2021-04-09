@@ -56,7 +56,7 @@ public class FpMovementRigid : MonoBehaviour
 
         if (grapling)
         {
-            gravityVelocity = gravity * gravityDirection;
+            gravityVelocity = gravity * gravityDirection/10;
         }
         gravityVelocity +=   gravity * Time.deltaTime* gravityDirection;
         rb.velocity += gravityVelocity* Time.deltaTime;

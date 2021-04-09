@@ -18,6 +18,9 @@ public class GrapGun : MonoBehaviour
     private Rigidbody rb;
 
     public float maxDist = 100f;
+    public float spring = 10f;
+    public float damper = 10f;
+    public float massScale = 10f;
 
     // Start is called before the first frame update
     void Awake()
@@ -59,9 +62,9 @@ public class GrapGun : MonoBehaviour
             joint.maxDistance = distance * 0.8f;
             joint.minDistance = distance * 0.25f;
 
-            joint.spring = 10f;
-            joint.damper = 10f;
-            joint.massScale = 10f;
+            joint.spring = spring;
+            joint.damper = damper;
+            joint.massScale = massScale;
 
             lr.positionCount = 2;
         }
