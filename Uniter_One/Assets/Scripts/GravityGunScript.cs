@@ -13,10 +13,11 @@ public class GravityGunScript : MonoBehaviour
     [FormerlySerializedAs("FpCamera")] public Transform fpCamera;
     public float blinkNear = 4;
     public Vector3 currentGravity = new Vector3(0, -1, 0);
-
+    public float gravity = 30f;
     // Start is called before the first frame update
     void Start()
     {
+        Physics.gravity = currentGravity * gravity;
     }
 
     // Update is called once per frame
@@ -39,10 +40,11 @@ public class GravityGunScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpCam.transform.position, fpCam.transform.forward, out hit))
         {
-            player.GetComponent<FpMovementRigid>().SwitchGravity(hit.normal);
-            fpCamera.GetComponent<FPcamera>().CameraSwitch();
+            player.GetComponent<FpMovement>().SwitchGravity(hit.normal,hit.point);
+            fpCamera.GetComponent<FPcamera>().GravitySwitch(hit.point);
+            Physics.gravity = -hit.normal * gravity;
             GameObject shoot = Instantiate(shootLight, hit.point, Quaternion.LookRotation(hit.normal));
-
+            StartCoroutine(fpCam.GetComponent<Shake>().CameraShake(0.45f, 0.45f));
             Destroy(shoot, 2);
         }
     }
@@ -53,13 +55,13 @@ public class GravityGunScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpCam.transform.position, fpCam.transform.forward, out hit, rangeBlink))
         {
-            player.GetComponent<FpMovementRigid>().Blink(hit.point - fpCam.transform.forward * blinkNear);
+            player.GetComponent<FpMovement>().Blink(hit.point - fpCam.transform.forward * blinkNear);
             GameObject shoot = Instantiate(shootLight, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(shoot, 2);
         }
         else
         {
-            player.GetComponent<FpMovementRigid>()
+            player.GetComponent<FpMovement>()
                 .Blink(fpCam.transform.position + rangeBlink * fpCam.transform.forward);
         }
     }

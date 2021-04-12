@@ -15,8 +15,13 @@ public class GrapGun : MonoBehaviour
 
     private SpringJoint joint;
     private Vector3 grapPoint;
+    
     private Rigidbody rb;
-
+    private CharacterController _controller;
+    private FpMovement fpm;
+    private FpMovementRigid fpmr;
+    
+    
     public float maxDist = 100f;
     public float spring = 10f;
     public float damper = 10f;
@@ -25,6 +30,10 @@ public class GrapGun : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        rb = player.GetComponent<Rigidbody>();
+        fpm = player.GetComponent<FpMovement>();
+        fpmr = player.GetComponent<FpMovementRigid>();
+        _controller = player.GetComponent<CharacterController>();
         lr = GetComponent<LineRenderer>();
     }
 
@@ -51,7 +60,12 @@ public class GrapGun : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit,maxDist,groundLayer))
         {
-            player.GetComponent<FpMovementRigid>().grapling = true;
+            fpm.enabled = false;
+            _controller.enabled = false;
+            rb.isKinematic = false;
+            fpmr.enabled = true;
+            rb.velocity = _controller.velocity;
+            
             grapPoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
@@ -79,11 +93,17 @@ public class GrapGun : MonoBehaviour
     }
 
     void StopGrap()
-    {   
-        player.GetComponent<FpMovementRigid>().grapling = false;
+    {
         if (!joint)
             return;
         lr.positionCount = 0;
         Destroy(joint);
+        Vector3 vel = rb.velocity;
+        rb.isKinematic = true;
+        fpmr.enabled = false;
+        _controller.enabled = true;
+        fpm.enabled = true;
+        fpm.gravityVelocity=new Vector3(Mathf.Abs(Physics.gravity.x)*vel.x,Mathf.Abs(Physics.gravity.y)*vel.y,Mathf.Abs(Physics.gravity.z)*vel.z)*1.1f/Vector3.Magnitude(Physics.gravity);
+       
     }
 }

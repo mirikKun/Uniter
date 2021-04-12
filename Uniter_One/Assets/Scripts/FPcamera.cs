@@ -22,15 +22,17 @@ public class FPcamera : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensivity * Time.deltaTime;
         yRotation += ivertion * mouseY;
-        yRotation = Mathf.Clamp(yRotation, -90f, 90f);
+        yRotation = Mathf.Clamp(yRotation, -90, 90f);
 
         transform.localRotation = Quaternion.Euler(yRotation, 0f, 0f);
         player.Rotate(Vector3.up * mouseX);
     }
 
-    public void CameraSwitch()
+    public void GravitySwitch(Vector3 point)
     {
-        float ySwitch = transform.eulerAngles.x;
-        transform.localRotation = Quaternion.Euler(-ySwitch, 0f, 0f);
+
+        yRotation = 30;
+
     }
+
 }

@@ -33,7 +33,7 @@ public class Perlin3D : MonoBehaviour
 
     void PutCharacter(bool[,,] busy)
     {
-        player.GetComponent<FpMovementRigid>().Place(busy, transform, cubeScale, cube);
+        player.GetComponent<FpMovement>().Place(busy, transform, cubeScale, cube);
     } 
 
     // Update is called once per frame
