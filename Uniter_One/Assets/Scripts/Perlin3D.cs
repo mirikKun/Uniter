@@ -23,18 +23,15 @@ public class Perlin3D : MonoBehaviour
     public Material material;
 
 
-    public GameObject player;
+    public FpMovement player;
+    public EnemySpawner enemySpawner;
 
     // Start is called before the first frame update
     void Start()
     {
         CreateRoom();
     }
-
-    void PutCharacter(bool[,,] busy)
-    {
-        player.GetComponent<FpMovement>().Place(busy, transform, cubeScale, cube);
-    } 
+    
 
     // Update is called once per frame
     void Update()
@@ -46,7 +43,7 @@ public class Perlin3D : MonoBehaviour
         List<CombineInstance> combine = new List<CombineInstance>();
 
         MeshFilter blockMesh = Instantiate(cube, Vector3.zero, Quaternion.identity).GetComponent<MeshFilter>();
-        bool[,,] busy = new bool[xSize, ySize, zSize];
+        bool[,,] busy = new bool[xSize+2, ySize+2, zSize+2];
         for (int x = 0, i = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++)
@@ -67,10 +64,8 @@ public class Perlin3D : MonoBehaviour
                         else
                             combine.Add(new CombineInstance
                                 {mesh = blockMesh.sharedMesh, transform = blockMesh.transform.localToWorldMatrix});
-                    }
-                    else
-                    {
-                        busy[x, y, z] = true;
+                        
+                        busy[x+1, y+1, z+1] = true;
                     }
                 }
             }
@@ -112,7 +107,13 @@ public class Perlin3D : MonoBehaviour
             g.isStatic = true;
         }
 
-        PutCharacter(busy);
+       
+        int[] set =player.Place(busy, transform, cubeScale, cube);
+        busy[set[0], set[1], set[2]] = true;
+        busy[set[0], set[1]+1, set[2]] = true;
+        enemySpawner.Set(busy,xSize,ySize,zSize,cubeScale);
+            
+        
     }
 
     float PerlinNoise3D(float x, float y, float z)

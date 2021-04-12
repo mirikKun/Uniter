@@ -19,7 +19,7 @@ public class FpMovement : MonoBehaviour
     private bool isGrounded;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         controller = GetComponent<CharacterController>();
     }
@@ -32,7 +32,7 @@ public class FpMovement : MonoBehaviour
         Jump();
     }
 
-    public void Place(bool[,,] points, Transform generatorPoint, int scale, GameObject cube)
+    public int[] Place(bool[,,] points, Transform generatorPoint, int scale, GameObject cube)
     {
         Debug.Log(transform.position);
         Debug.Log(generatorPoint.position);
@@ -40,19 +40,20 @@ public class FpMovement : MonoBehaviour
         int yPos = (int) (transform.position.y - generatorPoint.position.y + (float) scale / 2) / scale;
         int zPos = (int) (transform.position.z - generatorPoint.position.z + (float) scale / 2) / scale;
         int shift = 0;
-        while (!points[xPos, yPos, zPos])
+        while (points[xPos+1, yPos+1, zPos+1])
         {
             shift++;
             yPos++;
         }
 
         Blink(transform.position + new Vector3(0, shift * scale, 0));
-        if (yPos == 0 || points[xPos, yPos - 1, zPos])
+        if (!points[xPos+1, yPos , zPos+1])
             Instantiate(cube, new Vector3(
                     xPos * scale + generatorPoint.position.x,
                     (yPos - 1) * scale + generatorPoint.position.y,
                     zPos * scale + generatorPoint.position.z)
                 , Quaternion.identity, generatorPoint);
+        return new int[3]{xPos, yPos, zPos};
     }
 
     void Move()
