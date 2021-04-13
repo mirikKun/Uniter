@@ -6036,7 +6036,7 @@ MonoBehaviour:
   lightCube: {fileID: 6346043361677619778, guid: 15af810c74ac9104db0ce0ed0a2e7a4b,
     type: 3}
   material: {fileID: 2100000, guid: 6f7e5ff1a4a57514583e1bb944d1834f, type: 2}
-  player: {fileID: 0}
+  player: {fileID: 2146696319}
   enemySpawner: {fileID: 1486215426}
 --- !u!4 &874716400
 Transform:
@@ -6432,8 +6432,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa2bf8d98766384e800d73d33069ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  count: 20
-  enemy: {fileID: 919132149155446097, guid: c41ba27b45a691e40bdd9a52f8f92d45, type: 3}
+  count: 10
+  enemy: {fileID: 508154265000664554, guid: f986a6da5f49c844288b4384e17dad01, type: 3}
 --- !u!4 &1486215427
 Transform:
   m_ObjectHideFlags: 0
@@ -11827,7 +11827,7 @@ GameObject:
   - component: {fileID: 2146696315}
   m_Layer: 9
   m_Name: FPCharacter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
