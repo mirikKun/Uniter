@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6885216045977383289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6885216045977383271}
+  - component: {fileID: 6885216045977383288}
+  m_Layer: 0
+  m_Name: CubeGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6885216045977383271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6885216045977383289}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -47.5, y: 2.5, z: -47.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6885216045977383288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6885216045977383289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4851e47b9251a454882629ebadb04d41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xSize: 20
+  ySize: 20
+  zSize: 20
+  multiplyIn: 0.2
+  bounce: 0.55
+  offset: 4528
+  cube: {fileID: 4567498925488630363, guid: 3287dab3054ff4f4299e702908debdd3, type: 3}
+  cubeScale: 5
+  lightEvalable: 0
+  lightPeriod: 50
+  lightCube: {fileID: 6346043361677619778, guid: 15af810c74ac9104db0ce0ed0a2e7a4b,
+    type: 3}
+  material: {fileID: 2100000, guid: 6f7e5ff1a4a57514583e1bb944d1834f, type: 2}
+  player: {fileID: 0}
+  enemySpawner: {fileID: 0}

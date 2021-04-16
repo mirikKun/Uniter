@@ -11,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
     public int count = 20;
     private int[] size;
     private int scaler;
+    public float speed = 10;
 
     public GameObject enemy;
 
@@ -81,12 +82,13 @@ public class EnemySpawner : MonoBehaviour
             {
                 freePoints[coord[0]+newDir[0]*i, coord[1]+newDir[1]*i, coord[2]+newDir[2]*i]=true;
             }
+            
             enemyObject.GetComponent<EnemyMovement>().SetRot(new Vector3(newDir[0],newDir[1],newDir[2]));
             Vector3 newPos = enemyObject.transform.position + new Vector3(newDir[0],newDir[1],newDir[2]) * (randLenght * scaler);
+            
             while (Vector3.Distance(enemyObject.transform.position,newPos)>0.05f)
             {
-                
-                enemyObject.transform.position=Vector3.Slerp(enemyObject.transform.position,newPos,Time.deltaTime);
+                enemyObject.transform.position=Vector3.MoveTowards(enemyObject.transform.position,newPos,speed*Time.deltaTime);
                 yield return null;
             }
             for (int i = 0; i < randLenght; i++)

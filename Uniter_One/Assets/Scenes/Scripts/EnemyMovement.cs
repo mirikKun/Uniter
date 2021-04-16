@@ -68,26 +68,7 @@ public class EnemyMovement : MonoBehaviour
     {
         movingDir = dir;
     }
-
-    Vector3 NewDirection()
-    {
-        int newDir = Random.Range(0, 5);
-        switch (newDir)
-        {
-            case 0:
-                return new Vector3(1, 0, 0);
-            case 1:
-                return new Vector3(-1, 0, 0);
-            case 2:
-                return new Vector3(0, 1, 0);
-            case 3:
-                return new Vector3(0, -1, 0);
-            case 4:
-                return new Vector3(0, 0, 1);
-            default:
-                return new Vector3(0, 0, -1);
-        }
-    }
+    
 
     Vector3 newVector3()
     {
