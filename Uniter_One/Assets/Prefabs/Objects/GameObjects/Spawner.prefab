@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   count: 10
-  speed: 10
   enemy: {fileID: 508154265000664554, guid: f986a6da5f49c844288b4384e17dad01, type: 3}
+  gravityGun: {fileID: 3493561104387502351, guid: 559828345745cde4fbe52cf61c802638,
+    type: 3}

@@ -46,15 +46,15 @@ MonoBehaviour:
   xSize: 20
   ySize: 20
   zSize: 20
+  cubeScale: 5
   multiplyIn: 0.2
   bounce: 0.55
   offset: 4528
   cube: {fileID: 4567498925488630363, guid: 3287dab3054ff4f4299e702908debdd3, type: 3}
-  cubeScale: 5
   lightEvalable: 0
   lightPeriod: 50
   lightCube: {fileID: 6346043361677619778, guid: 15af810c74ac9104db0ce0ed0a2e7a4b,
     type: 3}
   material: {fileID: 2100000, guid: 6f7e5ff1a4a57514583e1bb944d1834f, type: 2}
   player: {fileID: 0}
-  enemySpawner: {fileID: 0}
+  spawner: {fileID: 0}
