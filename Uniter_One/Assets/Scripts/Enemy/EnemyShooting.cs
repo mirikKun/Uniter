@@ -28,6 +28,8 @@ public class EnemyShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!player) return;
+        
         distanceToPlayer = Vector3.Distance(player.position, transform.position);
         if (distanceToPlayer < distanceToFind)
         {

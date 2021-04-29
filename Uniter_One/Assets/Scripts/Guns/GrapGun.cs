@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class GrapGun : MonoBehaviour
+public class GrapGun : Gun
 {
     private LineRenderer lr;
 
 
     public LayerMask groundLayer;
 
-    public Transform hookTip, fpCamera, player;
+    public Transform hookTip, player;
     private SkillController sc;
 
     private SpringJoint joint;
@@ -19,7 +19,7 @@ public class GrapGun : MonoBehaviour
     
     private Rigidbody rb;
     private CharacterController _controller;
-    private FpMovement fpm;
+    private FpController fpm;
     private FpMovementRigid fpmr;
     
     
@@ -34,39 +34,20 @@ public class GrapGun : MonoBehaviour
     void Awake()
     {
         rb = player.GetComponent<Rigidbody>();
-        fpm = player.GetComponent<FpMovement>();
+        fpm = player.GetComponent<FpController>();
         fpmr = player.GetComponent<FpMovementRigid>();
         _controller = player.GetComponent<CharacterController>();
         lr = GetComponent<LineRenderer>();
         sc = player.GetComponent<SkillController>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (!(Time.time >= _fireTime)) return;
-        
-        if (Input.GetButtonDown("Fire2"))
-        {
-            
-            StartGrap();
-        }
-        else if (Input.GetButtonUp("Fire2"))
-        {
-            
-            StopGrap();
-            _fireTime = Time.time + cooldown; 
-            StartCoroutine(sc.StartCooldown(1,cooldown));
-        }
-    }
-
     void LateUpdate()
     {
         DrawRope();
     }
 
-    void StartGrap()
+    public override void Shoot()
     {
+        if (!(Time.time >= _fireTime)) return;
         RaycastHit hit;
         if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit,maxDist,groundLayer))
         {
@@ -102,8 +83,11 @@ public class GrapGun : MonoBehaviour
         lr.SetPosition(1, grapPoint);
     }
 
-    void StopGrap()
+    public void StopGrap()
     {
+        _fireTime = Time.time + cooldown; 
+        StartCoroutine(sc.StartCooldown(1,cooldown));
+        
         if (!joint)
             return;
         lr.positionCount = 0;

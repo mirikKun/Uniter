@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class GravitySwitchGun : MonoBehaviour
+public class GravitySwitchGun : Gun
 {
-    public Transform player; 
-    public Transform fpCamera;
-    public ParticleSystem boom;
+    public Transform player;
+    public GameObject boom;
     public Spawner spawner;
    
     public Vector3 currentGravity = new Vector3(0, -1, 0);
+    public LayerMask layerMask;
     public float gravity = 30f;
+    private bool shooted;
+    
 
     public void SetPlayer(Transform newPlayer, Transform newCamera)
     {
@@ -24,15 +26,6 @@ public class GravitySwitchGun : MonoBehaviour
         spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
         Physics.gravity = currentGravity * gravity;
     }
-
-    void Update()
-    {
-        if (Input.GetButtonDown("Fire1")&&player)
-        {
-
-            ChangeGravity();
-        }
-    }
     
 
     public IEnumerator Disappear(float time)
@@ -43,22 +36,21 @@ public class GravitySwitchGun : MonoBehaviour
 
         Destroy(Instantiate(boom, trans.position, Quaternion.identity, player),3);
         spawner.GravityGunSpawn();
-        Destroy(trans.parent.gameObject);
+        Destroy(gameObject);
         
     }
 
-    void ChangeGravity()
+    public override void Shoot()
     {
-        
+        if(shooted) return;
         RaycastHit hit;
-        if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit))
+        if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit,layerMask))
         {
-            player.GetComponent<FpMovement>().SwitchGravity(hit.normal);
-            fpCamera.GetComponent<FPcamera>().GravitySwitch(hit.point);
-            
-            StartCoroutine(fpCamera.GetComponent<ShakeCamera>().CameraShake(0.45f, 0.45f));
+            shooted = true;
+            Physics.gravity = -hit.normal * gravity;
+            player.GetComponent<FpController>().SwitchGravity(hit.normal);
+            fpCamera.GetComponentInParent<ShakeCamera>().StartShake(0.45f, 0.45f);
+            StartCoroutine(Disappear(0));
         }
-        Physics.gravity = -hit.normal * gravity;
-        StartCoroutine(Disappear(0));
     }
 }
