@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,8 +14,7 @@ public class OnlineManager : MonoBehaviourPunCallbacks
 
   private void Start()
   {
-    Vector3 playerPosition = spawner.GetPlayerPosition();
-    PhotonNetwork.Instantiate(player.name, playerPosition, Quaternion.identity);
+    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager") , Vector3.zero, Quaternion.identity);
   }
 
   public void Leave()

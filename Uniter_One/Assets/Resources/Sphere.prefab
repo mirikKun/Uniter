@@ -267,6 +267,8 @@ MonoBehaviour:
     type: 3}
   hitFlash: {fileID: 9205037776847083465, guid: 0a1b3f5511ff05944b807d26d65c813a,
     type: 3}
+  damage: 10
+  targetTag: Player
 --- !u!114 &31922533112489523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,7 +287,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 1592282748897622729}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

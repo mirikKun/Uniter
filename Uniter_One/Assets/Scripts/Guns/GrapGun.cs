@@ -3,42 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
-
+using Photon.Pun;
 public class GrapGun : Gun
 {
     private LineRenderer lr;
 
 
     public LayerMask groundLayer;
-
+    public GameObject particle;
     public Transform hookTip, player;
     private SkillController sc;
 
     private SpringJoint joint;
     private Vector3 grapPoint;
-    
-    private Rigidbody rb;
-    private CharacterController _controller;
+
     private FpController fpm;
-    private FpMovementRigid fpmr;
-    
-    
+
     public float maxDist = 100f;
-    public float spring = 10f;
-    public float damper = 10f;
-    public float massScale = 10f;
-    public float cooldown = 2;
+    public float spring = 5f;
+    public float damper = 15f;
+    public float massScale = 5f;
+    public float cooldown = 1.5f;
     private float _fireTime = 0f;
+    private PhotonView PV;
 
     // Start is called before the first frame update
     void Awake()
     {
-        rb = player.GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
         fpm = player.GetComponent<FpController>();
-        fpmr = player.GetComponent<FpMovementRigid>();
-        _controller = player.GetComponent<CharacterController>();
         lr = GetComponent<LineRenderer>();
         sc = player.GetComponent<SkillController>();
+           
     }
     void LateUpdate()
     {
@@ -49,21 +45,17 @@ public class GrapGun : Gun
     {
         if (!(Time.time >= _fireTime)) return;
         RaycastHit hit;
-        if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit,maxDist,groundLayer))
+        if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit, maxDist, groundLayer))
         {
-            fpm.enabled = false;
-            _controller.enabled = false;
-            rb.isKinematic = false;
-            fpmr.enabled = true;
-            rb.velocity = _controller.velocity;
-            
+            fpm.GrapModeOn();
+
             grapPoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.connectedAnchor = grapPoint;
-            
+
             float distance = Vector3.Distance(player.position, grapPoint);
-            
+
             joint.maxDistance = distance * 0.8f;
             joint.minDistance = distance * 0.25f;
 
@@ -72,7 +64,9 @@ public class GrapGun : Gun
             joint.massScale = massScale;
 
             lr.positionCount = 2;
+            PV.RPC("ParticleOn",RpcTarget.All,true);
         }
+        
     }
 
     void DrawRope()
@@ -83,24 +77,20 @@ public class GrapGun : Gun
         lr.SetPosition(1, grapPoint);
     }
 
+    [PunRPC]
+    void ParticleOn(bool enable)
+    {
+        particle.SetActive(enable);
+    }
     public void StopGrap()
     {
-        _fireTime = Time.time + cooldown; 
-        StartCoroutine(sc.StartCooldown(1,cooldown));
-        
         if (!joint)
             return;
+        _fireTime = Time.time + cooldown;
+        StartCoroutine(sc.StartCooldown(1, cooldown));
         lr.positionCount = 0;
         Destroy(joint);
-        
-        
-        Vector3 vel = rb.velocity;
-        rb.isKinematic = true;
-        fpmr.enabled = false;
-        _controller.enabled = true;
-        fpm.enabled = true;
-        fpm.gravityVelocity=new Vector3(Mathf.Abs(Physics.gravity.x)*vel.x,Mathf.Abs(Physics.gravity.y)*vel.y,Mathf.Abs(Physics.gravity.z)*vel.z)*1.1f/Vector3.Magnitude(Physics.gravity);
-       
+        fpm.GrapModeOff();
+        PV.RPC("ParticleOn",RpcTarget.All,false);
     }
-    
 }

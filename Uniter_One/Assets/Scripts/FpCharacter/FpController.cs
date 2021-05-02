@@ -1,19 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class FpController : MonoBehaviour
+public class FpController : MonoBehaviour,IDamageable
 {
+    public float maxHeals =100;
+    private float currentHeals ;
     private CharacterController _controller;
-    public Transform groundCheck;
+    public Transform groundCheck,roofCheck;
     public Transform mainCamera;
     public float gravity = 20f;
     public LayerMask groundMasc;
     public float groundDistance = 0.5f;
     public float speed = 12f;
     public float jumpHeight = 10;
+    public Image healthBar;
     
     public float mouseSensivity = 100f;
     private float yRotation = 0f;
@@ -28,48 +33,103 @@ public class FpController : MonoBehaviour
     public SkillController sc;
     private Vector3 _gravityDirection = new Vector3(0, -1, 0);
     private bool _isGrounded;
+    private bool _isUnderRoof;
     private float _gravitySwitchDistance=10;
-    private PhotonView _photonView;
+    private PhotonView PV;
     private SwitchGravity sg;
-
+    private Rigidbody rb;
+    private Vector3 move;
+    private bool isGrapMod;
+    private PlayerManager _playerManager;
+    public GameObject ui;
+    
+    
     // Start is called before the first frame update
     void Awake()
-    {   
-        _photonView = GetComponent<PhotonView>();
+    {
+        rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
         _controller = GetComponent<CharacterController>();
+        _playerManager = PhotonView.Find((int) PV.InstantiationData[0]).GetComponent<PlayerManager>();
+
 
     }
 
     void Start()
     {
+        currentHeals = maxHeals;
         sg=GameObject.FindWithTag("Manager").GetComponent<SwitchGravity>();
-        if (!_photonView.IsMine)
+        if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(ui);
+            Destroy(rb);
+            Destroy(_controller);
         }
     }
     // Update is called once per frame
     void Update()
     {
-        if (!_photonView.IsMine)
+        if (!PV.IsMine)
+            return;
+        GetInput();
+        CameraRotate();
+        if (isGrapMod)
             return;
         Move();
         Gravity();
         Jump();
         PlaceToBlink();
-        CameraRotate();
+        
     }
-    
 
+    private void FixedUpdate()
+    {
+        if(!isGrapMod)
+            return;
+        rb.AddForce(gravity*0.7f*_gravityDirection, ForceMode.Acceleration);
+        if(Vector3.Magnitude(rb.velocity)<25)
+            rb.AddForce(speed*0.7f*move,ForceMode.Impulse);
+    }
+
+    public void GrapModeOn()
+    {
+        isGrapMod = true;
+        _controller.enabled = false;
+        rb.isKinematic = false;
+        rb.velocity = _controller.velocity;
+    }
+    public void GrapModeOff()
+    {
+        isGrapMod = false;
+        Vector3 vel = rb.velocity;
+        rb.isKinematic = true;
+        _controller.enabled = true;
+        gravityVelocity = Vector3.zero;
+        StartCoroutine(RushDeceleration(vel));
+    }
+
+    private IEnumerator RushDeceleration(Vector3 impulse)
+    {
+        while (impulse.magnitude>1||_isGrounded)
+        {
+            impulse *=0.97f;
+            _controller.Move(Time.deltaTime*1.6f*impulse  );
+            yield return null; 
+        }
+        
+    }
     void Move()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        var transform1 = transform;
-        Vector3 move = transform1.right * x + transform1.forward * z;
         _controller.Move(speed * Time.deltaTime * move);
     }
 
+    void GetInput()
+    {
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+        move = transform.right * x + transform.forward * z;
+    }
     private void CameraRotate()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
@@ -82,9 +142,7 @@ public class FpController : MonoBehaviour
     }
     bool checkGravity(Vector3 velocity, Vector3 dir)
     {
-        if (velocity.x * dir.x + velocity.y * dir.y + velocity.z * dir.z > 0)
-            return true;
-        return false;
+        return velocity.x * dir.x + velocity.y * dir.y + velocity.z * dir.z > 0;
     }
 
     void Gravity()
@@ -95,6 +153,11 @@ public class FpController : MonoBehaviour
             gravityVelocity = _gravityDirection * 3;
         }
 
+        _isUnderRoof = Physics.CheckSphere(roofCheck.position, groundDistance, groundMasc);
+        if (_isUnderRoof&&!checkGravity(gravityVelocity, _gravityDirection))
+        {
+            gravityVelocity = _gravityDirection * 3;
+        }
         gravityVelocity += gravity * Time.deltaTime * _gravityDirection;
         _controller.Move(gravityVelocity * Time.deltaTime);
     }
@@ -171,6 +234,7 @@ public class FpController : MonoBehaviour
 
             transform.eulerAngles = direct;
         }
+        mainCamera.GetComponentInParent<ShakeCamera>().StartShake(0.45f, 0.45f);
     }
 
     void PlaceToBlink()
@@ -196,5 +260,30 @@ public class FpController : MonoBehaviour
         transform.position = pos;
         gravityVelocity = Vector3.zero;
         _controller.enabled = true;
+    }
+
+
+    public void TakeDamage(float damage)
+    {
+        PV.RPC("RPCTakeDamage",RpcTarget.All,damage);
+    }
+
+    [PunRPC]
+    private void RPCTakeDamage(float damage)
+    {
+        if(!PV.IsMine)
+            return;
+        currentHeals -= damage;
+        healthBar.fillAmount = currentHeals / maxHeals;
+        if (currentHeals <= 0)
+        {
+            Die();
+        }
+
+    }
+
+    private void Die()
+    {
+        _playerManager.Die();
     }
 }

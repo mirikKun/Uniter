@@ -6,7 +6,7 @@ public class ShakeCamera : MonoBehaviour
 {
     public void StartShake(float duration, float magnitude)
     {
-        //StartCoroutine(CameraShake(duration, magnitude));
+        StartCoroutine(CameraShake(duration, magnitude));
     }
     public IEnumerator CameraShake(float duration, float magnitude)
     {

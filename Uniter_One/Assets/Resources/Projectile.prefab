@@ -84,6 +84,8 @@ MonoBehaviour:
     type: 3}
   hitFlash: {fileID: 9205037776847083465, guid: aade8e90e254c6d4d947cb17a204fd20,
     type: 3}
+  damage: 30
+  targetTag: Enemy
 --- !u!136 &9025049202344559803
 CapsuleCollider:
   m_ObjectHideFlags: 0

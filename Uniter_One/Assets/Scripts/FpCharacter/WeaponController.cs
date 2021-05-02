@@ -29,7 +29,7 @@ public class WeaponController : MonoBehaviour
 
     private void WeaponShooting()
     {
-        if (!currentGun) return;
+        
         if (Input.GetButtonDown("Fire2"))
         {
             graplinGun.Shoot();
@@ -38,7 +38,7 @@ public class WeaponController : MonoBehaviour
         {
             graplinGun.StopGrap();
         }
-
+        if (!currentGun) return;
         if (Input.GetButton("Fire1"))
         {
             currentGun.Shoot();

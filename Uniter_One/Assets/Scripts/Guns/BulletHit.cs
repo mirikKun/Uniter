@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-
+using Photon.Pun;
 public class BulletHit : MonoBehaviour
 {
     public GameObject mussleFlash;
     public GameObject hitFlash;
-
+    
+    public float damage;
+    public String targetTag;
     private void Start()
     {
         GameObject flash = Instantiate(mussleFlash, transform.position, transform.localRotation);
@@ -19,13 +22,14 @@ public class BulletHit : MonoBehaviour
         ContactPoint contact = other.contacts[0];
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
         Vector3 pos = contact.point;
-
-        GameObject hit = Instantiate(hitFlash, pos, rot);
-
-        Destroy(hit, 3);
-        if (!other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag(targetTag))
         {
-            Destroy(gameObject);
+            Debug.Log("nanananan");
+            other.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
         }
+        GameObject hit = Instantiate(hitFlash, pos, rot);
+        Destroy(hit, 3);
+        Destroy(gameObject);
+
     }
 }

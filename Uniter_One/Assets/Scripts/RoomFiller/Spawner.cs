@@ -4,10 +4,12 @@ using System.Numerics;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
+using Photon.Pun;
 
 public class Spawner : MonoBehaviour
 {
-    public int count = 20;
+    public int enemyCount = 20;
+    public int gravityGunCount = 10;
     private bool[,,] _busyPoints;
     private int[] _size;
 
@@ -20,20 +22,23 @@ public class Spawner : MonoBehaviour
         _busyPoints = busy;
         _size = size;
         EnemySpawner();
-        GravityGunSpawn();
+        for (int i = 0; i < gravityGunCount; i++)
+        {
+            GravityGunSpawn();
+        }
     }
 
     public Vector3 GetPlayerPosition()
     {
-       Vector3Int newPlace = FindPlaceToSpawn();
-        if ( !_busyPoints[newPlace.x, newPlace.y - 1, newPlace.z])
+        Vector3Int newPlace = FindPlaceToSpawn();
+        if (!_busyPoints[newPlace.x, newPlace.y - 1, newPlace.z])
         {
-            Instantiate(cube, new Vector3(newPlace.x * _size[3] + transform.position.x,
-                (newPlace.y-1) * _size[3] + transform.position.y,
-                newPlace.z * _size[3] + transform.position.z), Quaternion.identity, transform);
-            
+            PhotonNetwork.Instantiate(cube.name, new Vector3(newPlace.x * _size[3] + transform.position.x,
+                (newPlace.y - 1) * _size[3] + transform.position.y,
+                newPlace.z * _size[3] + transform.position.z), Quaternion.identity);
         }
-        _busyPoints[newPlace.x, newPlace.y-1, newPlace.z] = true;
+
+        _busyPoints[newPlace.x, newPlace.y - 1, newPlace.z] = true;
         return new Vector3(newPlace.x * _size[3] + transform.position.x,
             newPlace.y * _size[3] + transform.position.y,
             newPlace.z * _size[3] + transform.position.z);
@@ -59,12 +64,12 @@ public class Spawner : MonoBehaviour
 
     private void EnemySpawner()
     {
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < enemyCount; i++)
         {
             Vector3Int newPlace = FindPlaceToSpawn();
-            GameObject newEnemy = Instantiate(enemy, new Vector3(newPlace.x * _size[3] + transform.position.x,
+            GameObject newEnemy = PhotonNetwork.Instantiate(enemy.name, new Vector3(newPlace.x * _size[3] + transform.position.x,
                 newPlace.y * _size[3] + transform.position.y,
-                newPlace.z * _size[3] + transform.position.z), Quaternion.identity, transform);
+                newPlace.z * _size[3] + transform.position.z), Quaternion.identity);
             newEnemy.GetComponent<EnemyMover>().BeginMovement(_busyPoints, _size, newPlace);
         }
     }
@@ -72,9 +77,9 @@ public class Spawner : MonoBehaviour
     public void GravityGunSpawn()
     {
         Vector3Int newPlace = FindPlaceToSpawn();
-        Instantiate(gravityGun, new Vector3(newPlace.x * _size[3] + transform.position.x,
+        PhotonNetwork.Instantiate(gravityGun.name, new Vector3(newPlace.x * _size[3] + transform.position.x,
             newPlace.y * _size[3] + transform.position.y,
-            newPlace.z * _size[3] + transform.position.z), Quaternion.identity, transform);
+            newPlace.z * _size[3] + transform.position.z), Quaternion.identity);
     }
 
 

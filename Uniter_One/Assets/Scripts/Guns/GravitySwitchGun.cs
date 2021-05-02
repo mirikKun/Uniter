@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Photon.Pun;
 
 public class GravitySwitchGun : Gun
 {
@@ -48,8 +49,12 @@ public class GravitySwitchGun : Gun
         {
             shooted = true;
             Physics.gravity = -hit.normal * gravity;
+            // foreach (var player in PhotonNetwork.PlayerList)
+            // {
+            //     player.
+            // }
             player.GetComponent<FpController>().SwitchGravity(hit.normal);
-            fpCamera.GetComponentInParent<ShakeCamera>().StartShake(0.45f, 0.45f);
+            
             StartCoroutine(Disappear(0));
         }
     }

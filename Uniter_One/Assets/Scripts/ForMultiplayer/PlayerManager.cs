@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    private Spawner spawner;
+    private GameObject player;
     private PhotonView PV;
     private void Awake()
     {
@@ -21,9 +23,17 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void CreateController()
+    private void CreateController()
     {
-        Debug.Log("InstantiatePlayer");
-        //Instantiating
+        spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+        Vector3 playerPosition = spawner.GetPlayerPosition();
+        player=PhotonNetwork.Instantiate("FPCharacter", playerPosition, Quaternion.identity,0,new object[]{PV.ViewID});
+    }
+
+    public void Die()
+    {
+        PhotonNetwork.Destroy(player);
+        CreateController();
     }
 }
+ 
