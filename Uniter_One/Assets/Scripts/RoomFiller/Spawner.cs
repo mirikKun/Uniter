@@ -17,6 +17,14 @@ public class Spawner : MonoBehaviour
     public GameObject gravityGun;
     public GameObject cube;
 
+    void Start()
+    {
+        if (!FillOptions.defaultRoom)
+        {
+            enemyCount = FillOptions.enemyCount;
+        }
+    }
+
     public void SetRoom(bool[,,] busy, int[] size)
     {
         _busyPoints = busy;

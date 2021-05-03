@@ -10,15 +10,17 @@ public class Perlin3D : MonoBehaviour
     public int zSize = 20;
     public int cubeScale = 5;
     private bool[,,] _busy;
-    public float multiplyIn = 1;
-    public float bounce = 0.5f;
+    public float multiplyIn = 0.2f;
+    public float bounce = 0.55f;
     [Range(0, 9999)] public int offset = 0;
 
 
     public GameObject cube;
-    
-
-    public bool lightEvalable = true;
+    public GameObject walls;
+    public Transform wallX; 
+    public Transform wallY; 
+    public Transform wallZ; 
+    public bool lightEvalable = false;
     public int lightPeriod = 13;
 
     public GameObject lightCube;
@@ -29,8 +31,29 @@ public class Perlin3D : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!FillOptions.defaultRoom)
+        {
+             xSize = FillOptions.size;
+             ySize = FillOptions.size;
+             zSize = FillOptions.size;
+             lightEvalable = !FillOptions.outerLightEnable;
+             if (FillOptions.randomRoomGeneration)
+             {
+                 offset = Random.Range(0, 9999); 
+                 multiplyIn = Random.Range(0.15f, 0.3f);
+                 bounce = Random.Range(0.45f, 0.65f);;
+             }
+             walls.SetActive(FillOptions.useWalls);
+             wallX.position -=Vector3.up * ((20 - xSize) * cubeScale);
+             wallY.position -=Vector3.up * ((20 - ySize) * cubeScale);
+             wallZ.position -=Vector3.up * ((20 - zSize) * cubeScale);
+        }
         CreateRoom();
     }
+
+   
+        
+    
     
     void CreateRoom()
     {

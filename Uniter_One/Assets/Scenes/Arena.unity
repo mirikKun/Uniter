@@ -1208,6 +1208,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6885216045977383288, guid: a2a64d4ad033cd243b84934e08547fe3,
         type: 3}
+      propertyPath: wallX
+      value: 
+      objectReference: {fileID: 478295357}
+    - target: {fileID: 6885216045977383288, guid: a2a64d4ad033cd243b84934e08547fe3,
+        type: 3}
+      propertyPath: wallY
+      value: 
+      objectReference: {fileID: 1461075360}
+    - target: {fileID: 6885216045977383288, guid: a2a64d4ad033cd243b84934e08547fe3,
+        type: 3}
+      propertyPath: wallZ
+      value: 
+      objectReference: {fileID: 71894612}
+    - target: {fileID: 6885216045977383288, guid: a2a64d4ad033cd243b84934e08547fe3,
+        type: 3}
+      propertyPath: walls
+      value: 
+      objectReference: {fileID: 946255152}
+    - target: {fileID: 6885216045977383288, guid: a2a64d4ad033cd243b84934e08547fe3,
+        type: 3}
       propertyPath: xSize
       value: 20
       objectReference: {fileID: 0}

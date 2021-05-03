@@ -30,6 +30,5 @@ public class BulletHit : MonoBehaviour
         GameObject hit = Instantiate(hitFlash, pos, rot);
         Destroy(hit, 3);
         Destroy(gameObject);
-
     }
 }
