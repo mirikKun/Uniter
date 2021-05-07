@@ -14,7 +14,6 @@ public class PlayerManager : MonoBehaviour
     {
         PV = GetComponent<PhotonView>();
     }
-
     void Start()
     {
         if (PV.IsMine)
@@ -23,17 +22,22 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    
     private void CreateController()
     {
         spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
         Vector3 playerPosition = spawner.GetPlayerPosition();
+        
         player=PhotonNetwork.Instantiate("FPCharacter", playerPosition, Quaternion.identity,0,new object[]{PV.ViewID});
     }
 
     public void Die()
     {
-        PhotonNetwork.Destroy(player);
-        CreateController();
+        if (PV.IsMine)
+        {
+            PhotonNetwork.Destroy(player);
+            CreateController();
+        }
     }
 }
  

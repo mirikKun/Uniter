@@ -36,7 +36,6 @@ public class FpController : MonoBehaviour,IDamageable
     private bool _isUnderRoof;
     private float _gravitySwitchDistance=10;
     private PhotonView PV;
-    private SwitchGravity sg;
     private Rigidbody rb;
     private Vector3 move;
     private bool isGrapMod;
@@ -58,7 +57,6 @@ public class FpController : MonoBehaviour,IDamageable
     void Start()
     {
         currentHeals = maxHeals;
-        sg=GameObject.FindWithTag("Manager").GetComponent<SwitchGravity>();
         if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -87,9 +85,9 @@ public class FpController : MonoBehaviour,IDamageable
     {
         if(!isGrapMod)
             return;
-        rb.AddForce(gravity*0.7f*_gravityDirection, ForceMode.Acceleration);
-        if(Vector3.Magnitude(rb.velocity)<25)
-            rb.AddForce(speed*0.7f*move,ForceMode.Impulse);
+        rb.AddForce(gravity*0.5f*_gravityDirection, ForceMode.Acceleration);
+        if(Vector3.Magnitude(rb.velocity)<20)
+            rb.AddForce(speed*0.5f*move,ForceMode.Impulse);
     }
 
     public void GrapModeOn()
@@ -187,11 +185,10 @@ public class FpController : MonoBehaviour,IDamageable
 
     public void SwitchGravity(Vector3 direct)
     {
-        sg.GravitySwitch(direct,gravity);
         yRotation = 30;
         Vector3 point;
         RaycastHit hit;
-        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, _gravitySwitchDistance))
+        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, _gravitySwitchDistance,groundMasc))
         {
              point = hit.point;
         }
@@ -203,6 +200,7 @@ public class FpController : MonoBehaviour,IDamageable
         Vector3 pos = transform.position;
         if (direct.sqrMagnitude == 1)
         {
+            Debug.Log(direct+" direc");
             _gravityDirection = -direct;
 
             if (direct.x == 1)
@@ -227,11 +225,12 @@ public class FpController : MonoBehaviour,IDamageable
             {
                 direct = new Vector3(-CalculateAngle(point.y - pos.y, point.x - pos.x), 90, 90);
             }
-            else //(direct.z == -1)
+            else if(direct.z == -1)
             {
                 direct = new Vector3(-CalculateAngle(point.y - pos.y, point.x - pos.x), 90, -90);
             }
-
+            
+            Debug.Log(direct+" transform");
             transform.eulerAngles = direct;
         }
         mainCamera.GetComponentInParent<ShakeCamera>().StartShake(0.45f, 0.45f);
@@ -244,7 +243,7 @@ public class FpController : MonoBehaviour,IDamageable
         StartCoroutine(sc.StartCooldown(2, cooldown));
 
         RaycastHit hit;
-        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, rangeBlink))
+        if (Physics.Raycast(mainCamera.position, mainCamera.forward, out hit, rangeBlink,groundMasc))
         {
             Blink(hit.point - mainCamera.forward * blinkNear);
         }
@@ -282,7 +281,7 @@ public class FpController : MonoBehaviour,IDamageable
 
     }
 
-    private void Die()
+    public void Die()
     {
         _playerManager.Die();
     }

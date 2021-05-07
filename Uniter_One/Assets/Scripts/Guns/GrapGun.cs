@@ -21,9 +21,10 @@ public class GrapGun : Gun
 
     public float maxDist = 100f;
     public float spring = 5f;
-    public float damper = 15f;
+    public float damper = 5f;
     public float massScale = 5f;
     public float cooldown = 1.5f;
+    public float climbSpeed = 3;
     private float _fireTime = 0f;
     private PhotonView PV;
 
@@ -56,8 +57,8 @@ public class GrapGun : Gun
 
             float distance = Vector3.Distance(player.position, grapPoint);
 
-            joint.maxDistance = distance * 0.8f;
-            joint.minDistance = distance * 0.25f;
+            joint.maxDistance = distance;
+            joint.minDistance = distance * 0.01f;
 
             joint.spring = spring;
             joint.damper = damper;
@@ -69,6 +70,10 @@ public class GrapGun : Gun
         
     }
 
+    public void Climbing()
+    {
+        joint.maxDistance -= Time.deltaTime * climbSpeed;
+    }
     void DrawRope()
     {
         if (!joint)

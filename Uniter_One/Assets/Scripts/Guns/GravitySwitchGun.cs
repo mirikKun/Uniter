@@ -45,17 +45,27 @@ public class GravitySwitchGun : Gun
     {
         if(shooted) return;
         RaycastHit hit;
-        if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit,layerMask))
+        if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit,200,layerMask))
         {
+            Debug.Log(hit.normal+"aaaaaaaaaaaaaaaaaaaa");
+            Debug.Log(hit.transform.gameObject+"bbbb");
+            if (CheckVector(hit.normal))
+                return;
             shooted = true;
             Physics.gravity = -hit.normal * gravity;
-            // foreach (var player in PhotonNetwork.PlayerList)
-            // {
-            //     player.
-            // }
             player.GetComponent<FpController>().SwitchGravity(hit.normal);
-            
             StartCoroutine(Disappear(0));
         }
+    }
+
+    private bool CheckVector(Vector3 vector)
+    {
+        if (Math.Abs(vector.x) != 1f)
+            return false;
+        if (Math.Abs(vector.y) != 1f)
+            return false;
+        if (Math.Abs(vector.z) != 1f)
+            return false;
+        return true;
     }
 }

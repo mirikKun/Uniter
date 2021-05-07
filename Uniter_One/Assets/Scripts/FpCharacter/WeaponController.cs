@@ -34,6 +34,11 @@ public class WeaponController : MonoBehaviour
         {
             graplinGun.Shoot();
         }
+        else if (Input.GetButton("Fire2")&&(Input.GetKey(KeyCode.LeftShift)))
+        {
+            Debug.Log("rofl");
+            graplinGun.Climbing();
+        }
         else if (Input.GetButtonUp("Fire2"))
         {
             graplinGun.StopGrap();

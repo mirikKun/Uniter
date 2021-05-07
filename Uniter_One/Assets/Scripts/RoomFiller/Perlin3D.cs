@@ -12,55 +12,84 @@ public class Perlin3D : MonoBehaviour
     private bool[,,] _busy;
     public float multiplyIn = 0.2f;
     public float bounce = 0.55f;
-    [Range(0, 9999)] public int offset = 0;
+    public int offset = 0;
 
 
-    public GameObject cube;
+    public GameObject cubePrefab;
+    public GameObject outerLight;
     public GameObject walls;
-    public Transform wallX; 
-    public Transform wallY; 
-    public Transform wallZ; 
+    public Transform wallX;
+    public Transform wallY;
+    public Transform wallZ;
+
+    public GameObject deathZone;
+    public Transform deathZoneX;
+    public Transform deathZoneY;
+    public Transform deathZoneZ;
     public bool lightEvalable = false;
-    public int lightPeriod = 13;
+    public int lightPeriod = 7;
 
     public GameObject lightCube;
     public Material material;
-    
+
     public Spawner spawner;
 
-    // Start is called before the first frame update
     void Start()
+    {
+        if (!FillOptions.join)
+            StartMakingRoom();
+    }
+
+    public void StartMakingRoom()
     {
         if (!FillOptions.defaultRoom)
         {
-             xSize = FillOptions.size;
-             ySize = FillOptions.size;
-             zSize = FillOptions.size;
-             lightEvalable = !FillOptions.outerLightEnable;
-             if (FillOptions.randomRoomGeneration)
-             {
-                 offset = Random.Range(0, 9999); 
-                 multiplyIn = Random.Range(0.15f, 0.3f);
-                 bounce = Random.Range(0.45f, 0.65f);;
-             }
-             walls.SetActive(FillOptions.useWalls);
-             wallX.position -=Vector3.up * ((20 - xSize) * cubeScale);
-             wallY.position -=Vector3.up * ((20 - ySize) * cubeScale);
-             wallZ.position -=Vector3.up * ((20 - zSize) * cubeScale);
+            xSize = FillOptions.size;
+            ySize = FillOptions.size;
+            zSize = FillOptions.size;
+            lightEvalable = !FillOptions.outerLightEnable;
+            outerLight.SetActive(FillOptions.outerLightEnable);
+            if (FillOptions.randomRoomGeneration)
+            {
+                if (!FillOptions.join)
+                {
+                    offset = Random.Range(0, 9999);
+                    multiplyIn = Random.Range(0.2f, 0.3f);
+                    bounce = Random.Range(0.5f, 0.6f);
+
+                    FillOptions.offset = offset;
+                    FillOptions.multiplyIn = multiplyIn;
+                    FillOptions.bounce = bounce;
+                }
+                else
+                {
+                    offset = FillOptions.offset;
+                    multiplyIn = FillOptions.multiplyIn;
+                    bounce = FillOptions.bounce;
+                }
+            }
+
+            walls.SetActive(FillOptions.useWalls);
+            wallX.position += wallX.transform.up * ((20 - xSize) * cubeScale);
+            wallY.position += wallY.transform.up * ((20 - ySize) * cubeScale);
+            wallZ.position += wallZ.transform.up * ((20 - zSize) * cubeScale);
+
+            deathZone.SetActive(!FillOptions.useWalls);
+            deathZoneX.position += deathZoneX.transform.up * ((20 - xSize) * cubeScale);
+            deathZoneY.position += deathZoneY.transform.up * ((20 - ySize) * cubeScale);
+            deathZoneZ.position += deathZoneZ.transform.up * ((20 - zSize) * cubeScale);
         }
+
         CreateRoom();
     }
 
-   
-        
-    
-    
+
     void CreateRoom()
     {
         List<CombineInstance> combine = new List<CombineInstance>();
 
-        MeshFilter blockMesh = Instantiate(cube, Vector3.zero, Quaternion.identity).GetComponent<MeshFilter>();
-        _busy = new bool[xSize+2, ySize+2, zSize+2];
+        MeshFilter blockMesh = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity).GetComponent<MeshFilter>();
+        _busy = new bool[xSize + 2, ySize + 2, zSize + 2];
         for (int x = 0, i = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++)
@@ -81,14 +110,14 @@ public class Perlin3D : MonoBehaviour
                         else
                             combine.Add(new CombineInstance
                                 {mesh = blockMesh.sharedMesh, transform = blockMesh.transform.localToWorldMatrix});
-                        
-                        _busy[x+1, y+1, z+1] = true;
+
+                        _busy[x + 1, y + 1, z + 1] = true;
                     }
                 }
             }
         }
 
-       
+
         List<List<CombineInstance>> combineList = new List<List<CombineInstance>>();
         int vertexCount = 0;
         combineList.Add(new List<CombineInstance>());
@@ -124,10 +153,10 @@ public class Perlin3D : MonoBehaviour
             g.isStatic = true;
         }
 
-       
-       
-        spawner.SetRoom(_busy, new int[]{xSize,ySize,zSize,cubeScale});
+
+        spawner.SetRoom(_busy, new int[] {xSize, ySize, zSize, cubeScale});
     }
+
     float PerlinNoise3D(float x, float y, float z)
     {
         float xy = Mathf.PerlinNoise(x, y);

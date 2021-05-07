@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using Photon.Pun;
 public class BulletHit : MonoBehaviour
 {
     public GameObject mussleFlash;
@@ -24,7 +20,6 @@ public class BulletHit : MonoBehaviour
         Vector3 pos = contact.point;
         if (other.gameObject.CompareTag(targetTag))
         {
-            Debug.Log("nanananan");
             other.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
         }
         GameObject hit = Instantiate(hitFlash, pos, rot);

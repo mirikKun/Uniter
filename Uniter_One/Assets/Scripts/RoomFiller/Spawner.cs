@@ -8,6 +8,7 @@ using Photon.Pun;
 
 public class Spawner : MonoBehaviour
 {
+    public int outerRadius = 5;
     public int enemyCount = 20;
     public int gravityGunCount = 10;
     private bool[,,] _busyPoints;
@@ -17,7 +18,7 @@ public class Spawner : MonoBehaviour
     public GameObject gravityGun;
     public GameObject cube;
 
-    void Start()
+    void Awake()
     {
         if (!FillOptions.defaultRoom)
         {
@@ -29,6 +30,8 @@ public class Spawner : MonoBehaviour
     {
         _busyPoints = busy;
         _size = size;
+        if(FillOptions.join)
+            return;
         EnemySpawner();
         for (int i = 0; i < gravityGunCount; i++)
         {
@@ -54,11 +57,12 @@ public class Spawner : MonoBehaviour
 
     private Vector3Int FindPlaceToSpawn()
     {
-        int x = Random.Range(_size[0] / 10, _size[0] - _size[0] / 10);
-        int y = Random.Range(_size[1] / 10, _size[1] - _size[1] / 10);
-        int z = Random.Range(_size[2] / 10, _size[2] - _size[2] / 10);
+        int x = Random.Range(_size[0] / outerRadius, _size[0] - _size[0] / outerRadius);
+        int y = Random.Range(_size[1] / outerRadius, _size[1] - _size[1] / outerRadius);
+        int z = Random.Range(_size[2] / outerRadius, _size[2] - _size[2] / outerRadius);
         Vector3Int dir = NewDirection();
 
+        Debug.Log(_size[0]+" "+_size[1]+" "+_size[2]+" coord  "+x+" "+y+" "+z);
         while (_busyPoints[x, y, z])
         {
             x += dir.x;

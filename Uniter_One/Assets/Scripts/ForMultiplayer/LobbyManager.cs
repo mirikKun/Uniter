@@ -16,6 +16,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public Toggle outerLightOn;
     public Toggle wallsOn;
     public Toggle randomRoomSetup;
+
+    private byte playerCount = 4;
+
     void Start()
     {
         PhotonNetwork.NickName = "Player" + Random.Range(1000, 9999);
@@ -23,7 +26,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "1";
         PhotonNetwork.ConnectUsingSettings();
-        
     }
 
     public override void OnConnectedToMaster()
@@ -36,12 +38,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         startMenu.SetActive(false);
         roomCreatorMenu.SetActive(true);
-        
-      size.value=FillOptions.size;
-      enemyCount.value=FillOptions.enemyCount;
-      outerLightOn.isOn=FillOptions.outerLightEnable;
-      wallsOn.isOn=FillOptions.useWalls;
-      randomRoomSetup.isOn=FillOptions.randomRoomGeneration;
+        size.value = FillOptions.size;
+        enemyCount.value = FillOptions.enemyCount;
+        outerLightOn.isOn = FillOptions.outerLightEnable;
+        wallsOn.isOn = FillOptions.useWalls;
+        randomRoomSetup.isOn = FillOptions.randomRoomGeneration;
     }
 
     public void StartMenu()
@@ -53,16 +54,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void CreateRoom()
     {
         FillOptions.defaultRoom = false;
-        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions() {MaxPlayers = 2});
+        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions() {MaxPlayers = playerCount});
     }
+
     public void CreateDefaultRoom()
     {
         FillOptions.defaultRoom = true;
-        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions() {MaxPlayers = 2});
+        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions() {MaxPlayers = playerCount});
     }
 
-    public void JionRoom()
+    public void JoinRoom()
     {
+        FillOptions.join = true;
         PhotonNetwork.JoinRandomRoom();
     }
 
@@ -73,27 +76,30 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Log(string message)
     {
-        Debug.Log(message);
         logText.text += '\n';
         logText.text += message;
     }
 
     public void SetSize(float roomSize)
     {
-        FillOptions.size = (int)roomSize;
+        FillOptions.size = (int) roomSize;
     }
+
     public void SetEnemyCount(float count)
     {
-        FillOptions.enemyCount = (int)count;
+        FillOptions.enemyCount = (int) count;
     }
+
     public void SetUseWall(bool useWalls)
     {
         FillOptions.useWalls = useWalls;
     }
+
     public void SetOuterLight(bool outerLight)
     {
         FillOptions.outerLightEnable = outerLight;
     }
+
     public void SetUseRandom(bool useRandom)
     {
         FillOptions.randomRoomGeneration = useRandom;

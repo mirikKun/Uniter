@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,16 +21,27 @@ public class EnemyShooting : MonoBehaviour
     private float distanceToPlayer;
 
     // Start is called before the first frame update
-    void Start()
+    private void OnTriggerStay(Collider other)
     {
-        player = GameObject.FindWithTag("Player").transform;
+        if (player)
+            return;
+        if (other.CompareTag("Player"))
+            player = other.transform;
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!player || other.transform != player)
+            return;
+        player = other.transform;
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        if(!player) return;
-        
+        if (!player) return;
+
         distanceToPlayer = Vector3.Distance(player.position, transform.position);
         if (distanceToPlayer < distanceToFind)
         {
@@ -69,5 +81,4 @@ public class EnemyShooting : MonoBehaviour
     {
         movingDir = dir;
     }
-
 }
