@@ -1,40 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class Perlin3D : MonoBehaviour
 {
-    public int xSize = 20;
-    public int ySize = 20;
-    public int zSize = 20;
-    public int cubeScale = 5;
+    [SerializeField] private int xSize = 20;
+    [SerializeField] private int ySize = 20;
+    [SerializeField] private int zSize = 20;
+    [SerializeField] private int cubeScale = 5;
+
+    [SerializeField] private float multiplyIn = 0.2f;
+    [SerializeField] private float bounce = 0.55f;
+    [SerializeField] private int offset = 0;
+
+    [SerializeField] private GameObject cubePrefab;
+    [SerializeField] private GameObject outerLight;
+    [SerializeField] private GameObject lightCube;
+
+    [SerializeField] private GameObject walls;
+    [SerializeField] private Transform wallX;
+    [SerializeField] private Transform wallY;
+    [SerializeField] private Transform wallZ;
+
+    [SerializeField] private GameObject deathZone;
+    [SerializeField] private Transform deathZoneX;
+    [SerializeField] private Transform deathZoneY;
+    [SerializeField] private Transform deathZoneZ;
+
+    [SerializeField] private bool lightAvailaible = false;
+    [SerializeField] private int lightPeriod = 7;
+
+    [SerializeField] private Material material;
+    [SerializeField] private Spawner spawner;
+
     private bool[,,] _busy;
-    public float multiplyIn = 0.2f;
-    public float bounce = 0.55f;
-    public int offset = 0;
 
-
-    public GameObject cubePrefab;
-    public GameObject outerLight;
-    public GameObject walls;
-    public Transform wallX;
-    public Transform wallY;
-    public Transform wallZ;
-
-    public GameObject deathZone;
-    public Transform deathZoneX;
-    public Transform deathZoneY;
-    public Transform deathZoneZ;
-    public bool lightEvalable = false;
-    public int lightPeriod = 7;
-
-    public GameObject lightCube;
-    public Material material;
-
-    public Spawner spawner;
-
-    void Start()
+    private void Start()
     {
         if (!FillOptions.join)
             StartMakingRoom();
@@ -47,7 +48,7 @@ public class Perlin3D : MonoBehaviour
             xSize = FillOptions.size;
             ySize = FillOptions.size;
             zSize = FillOptions.size;
-            lightEvalable = !FillOptions.outerLightEnable;
+            lightAvailaible = !FillOptions.outerLightEnable;
             outerLight.SetActive(FillOptions.outerLightEnable);
             if (FillOptions.randomRoomGeneration)
             {
@@ -79,12 +80,11 @@ public class Perlin3D : MonoBehaviour
             deathZoneY.position += deathZoneY.transform.up * ((20 - ySize) * cubeScale);
             deathZoneZ.position += deathZoneZ.transform.up * ((20 - zSize) * cubeScale);
         }
-
         CreateRoom();
     }
 
 
-    void CreateRoom()
+    private void CreateRoom()
     {
         List<CombineInstance> combine = new List<CombineInstance>();
 
@@ -103,7 +103,7 @@ public class Perlin3D : MonoBehaviour
                         blockMesh.transform.position = new Vector3(x * cubeScale + transform.position.x,
                             y * cubeScale + transform.position.y,
                             z * cubeScale + transform.position.z);
-                        if (i % lightPeriod == 0 && lightEvalable)
+                        if (i % lightPeriod == 0 && lightAvailaible)
                             Instantiate(lightCube, new Vector3(x * cubeScale + transform.position.x,
                                 y * cubeScale + transform.position.y,
                                 z * cubeScale + transform.position.z), Quaternion.identity, transform);
@@ -152,12 +152,10 @@ public class Perlin3D : MonoBehaviour
             g.AddComponent<MeshCollider>();
             g.isStatic = true;
         }
-
-
         spawner.SetRoom(_busy, new int[] {xSize, ySize, zSize, cubeScale});
     }
 
-    float PerlinNoise3D(float x, float y, float z)
+    private float PerlinNoise3D(float x, float y, float z)
     {
         float xy = Mathf.PerlinNoise(x, y);
         float xz = Mathf.PerlinNoise(x, z);

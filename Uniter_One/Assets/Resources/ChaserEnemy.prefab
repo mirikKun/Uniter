@@ -49,9 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b1c99e64cfb5fc44b4b6b3d544db472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToFind: 30
-  bulletSpeed: 30
-  smoothing: 7
   projectile: {fileID: 7604953351222247489, guid: fc61bff3052a20642b6e10124fc40d97,
     type: 3}
   barrel: {fileID: 8955538965954337546}
@@ -61,6 +58,9 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 512
+  distanceToFind: 30
+  bulletSpeed: 30
+  smoothing: 7
   fireRate: 0.5
 --- !u!114 &-8554998828472293820
 MonoBehaviour:

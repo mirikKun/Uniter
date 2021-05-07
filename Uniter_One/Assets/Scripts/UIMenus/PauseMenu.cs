@@ -6,8 +6,8 @@ using Photon.Pun;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject pauseMenuUI;
-    public static bool GameInPaused ;
+    [SerializeField] private GameObject pauseMenuUI;
+    private static bool gameInPaused;
 
     private void Start()
     {
@@ -15,11 +15,11 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameInPaused)
+            if (gameInPaused)
             {
                 Resume();
             }
@@ -34,10 +34,11 @@ public class PauseMenu : MonoBehaviour
     {
         PhotonNetwork.LeaveRoom();
     }
+
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        GameInPaused = false;
+        gameInPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -46,7 +47,7 @@ public class PauseMenu : MonoBehaviour
     {
         Cursor.visible = true;
         pauseMenuUI.SetActive(true);
-        GameInPaused = true;
+        gameInPaused = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }

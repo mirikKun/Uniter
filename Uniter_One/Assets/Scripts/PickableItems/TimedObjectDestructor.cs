@@ -1,17 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class TimedObjectDestructor : MonoBehaviour {
 
-	public float timeOut = 3.0f;
-	
-	void Awake () 
-	{
-		Invoke ("DestroyNow", timeOut);
-	}
-	
-	void DestroyNow ()
-	{
-		Destroy(gameObject);
-	}
+public class TimedObjectDestructor : MonoBehaviour
+{
+    [SerializeField] private float timeOut = 3.0f;
+
+    private void Awake()
+    {
+        Destroy(gameObject, timeOut);
+    }
 }

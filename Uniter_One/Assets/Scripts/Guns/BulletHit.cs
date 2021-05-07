@@ -2,11 +2,11 @@
 using UnityEngine;
 public class BulletHit : MonoBehaviour
 {
-    public GameObject mussleFlash;
-    public GameObject hitFlash;
+    [SerializeField] private GameObject mussleFlash;
+    [SerializeField] private GameObject hitFlash;
     
-    public float damage;
-    public String targetTag;
+    [SerializeField] private float damage;
+    [SerializeField] private String targetTag;
     private void Start()
     {
         GameObject flash = Instantiate(mussleFlash, transform.position, transform.localRotation);

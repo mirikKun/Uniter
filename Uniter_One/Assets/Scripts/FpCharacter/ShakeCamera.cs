@@ -8,9 +8,10 @@ public class ShakeCamera : MonoBehaviour
     {
         StartCoroutine(CameraShake(duration, magnitude));
     }
-    public IEnumerator CameraShake(float duration, float magnitude)
-    {
 
+    private IEnumerator CameraShake(float duration, float magnitude)
+    {
+        yield return new WaitForSeconds(0.1f);
         Vector3 originalPos = transform.localPosition;
         float elapsed = 0f;
         while (elapsed < duration)

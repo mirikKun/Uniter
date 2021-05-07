@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class EnemyMover : MonoBehaviour
 {
+    
+    [SerializeField] private float speed = 10;
+    [SerializeField] private EnemyShooting enemyShooting;
+    
     private bool[,,] _busyPoints;
     private int[] _size;
-    public float speed = 10;
-
-    public EnemyShooting enemyShooting;
+    
 
     public void BeginMovement(bool[,,] freePoints, int[] size, Vector3Int coord)
     {
@@ -37,7 +39,7 @@ public class EnemyMover : MonoBehaviour
         }
     }
 
-    IEnumerator MoveCoroutine(Vector3Int coord)
+    private IEnumerator MoveCoroutine(Vector3Int coord)
     {
         while (true)
         {
@@ -80,7 +82,7 @@ public class EnemyMover : MonoBehaviour
         }
     }
 
-    int FindLenght(Vector3Int coord, Vector3Int newDir)
+    private int FindLenght(Vector3Int coord, Vector3Int newDir)
     {
         int lenght = 1;
         if (newDir.x != 0)

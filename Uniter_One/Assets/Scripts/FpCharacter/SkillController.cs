@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class SkillController : MonoBehaviour
 {
-    public Image[] imageCooldowns;
-    public Image[] imageCountdowns;
+    [SerializeField] private Image[] imageCooldowns;
+    [SerializeField] private Image[] imageCountdowns;
 
     public void OuterStartCoroutineCooldown(int index, float cooldown)
     {

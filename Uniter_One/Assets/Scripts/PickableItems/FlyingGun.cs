@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Object = UnityEngine.Object;
+﻿using UnityEngine;
 
 public class FlyingGun : MonoBehaviour
 {
-    public GameObject gun;
+    [SerializeField] private GameObject gun;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-             other.GetComponent<AddGun>().AddingGun(gun);
-             Destroy(gameObject);
+            other.GetComponent<AddGun>().AddingGun(gun);
+            Destroy(gameObject);
         }
     }
-
 }

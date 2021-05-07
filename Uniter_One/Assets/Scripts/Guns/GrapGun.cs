@@ -1,43 +1,36 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
+
 public class GrapGun : Gun
 {
-    private LineRenderer lr;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private GameObject particle;
+    [SerializeField] private Transform hookTip, player;
 
+    [SerializeField] private float maxDist = 100f;
+    [SerializeField] private float spring = 5f;
+    [SerializeField] private float damper = 5f;
+    [SerializeField] private float massScale = 5f;
+    [SerializeField] private float cooldown = 1.5f;
+    [SerializeField] private float climbSpeed = 3;
 
-    public LayerMask groundLayer;
-    public GameObject particle;
-    public Transform hookTip, player;
-    private SkillController sc;
-
-    private SpringJoint joint;
-    private Vector3 grapPoint;
-
-    private FpController fpm;
-
-    public float maxDist = 100f;
-    public float spring = 5f;
-    public float damper = 5f;
-    public float massScale = 5f;
-    public float cooldown = 1.5f;
-    public float climbSpeed = 3;
-    private float _fireTime = 0f;
     private PhotonView PV;
+    private float _fireTime = 0f;
+    private SkillController _sc;
+    private SpringJoint _joint;
+    private Vector3 _grapPoint;
+    private FpController _fpm;
+    private LineRenderer _lr;
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         PV = GetComponent<PhotonView>();
-        fpm = player.GetComponent<FpController>();
-        lr = GetComponent<LineRenderer>();
-        sc = player.GetComponent<SkillController>();
-           
+        _fpm = player.GetComponent<FpController>();
+        _lr = GetComponent<LineRenderer>();
+        _sc = player.GetComponent<SkillController>();
     }
-    void LateUpdate()
+
+    private void LateUpdate()
     {
         DrawRope();
     }
@@ -48,38 +41,38 @@ public class GrapGun : Gun
         RaycastHit hit;
         if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit, maxDist, groundLayer))
         {
-            fpm.GrapModeOn();
+            _fpm.GrapModeOn();
 
-            grapPoint = hit.point;
-            joint = player.gameObject.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = grapPoint;
+            _grapPoint = hit.point;
+            _joint = player.gameObject.AddComponent<SpringJoint>();
+            _joint.autoConfigureConnectedAnchor = false;
+            _joint.connectedAnchor = _grapPoint;
 
-            float distance = Vector3.Distance(player.position, grapPoint);
+            float distance = Vector3.Distance(player.position, _grapPoint);
 
-            joint.maxDistance = distance;
-            joint.minDistance = distance * 0.01f;
+            _joint.maxDistance = distance;
+            _joint.minDistance = distance * 0.01f;
 
-            joint.spring = spring;
-            joint.damper = damper;
-            joint.massScale = massScale;
+            _joint.spring = spring;
+            _joint.damper = damper;
+            _joint.massScale = massScale;
 
-            lr.positionCount = 2;
-            PV.RPC("ParticleOn",RpcTarget.All,true);
+            _lr.positionCount = 2;
+            PV.RPC("ParticleOn", RpcTarget.All, true);
         }
-        
     }
 
     public void Climbing()
     {
-        joint.maxDistance -= Time.deltaTime * climbSpeed;
+        _joint.maxDistance -= Time.deltaTime * climbSpeed;
     }
+
     void DrawRope()
     {
-        if (!joint)
+        if (!_joint)
             return;
-        lr.SetPosition(0, hookTip.position);
-        lr.SetPosition(1, grapPoint);
+        _lr.SetPosition(0, hookTip.position);
+        _lr.SetPosition(1, _grapPoint);
     }
 
     [PunRPC]
@@ -87,15 +80,16 @@ public class GrapGun : Gun
     {
         particle.SetActive(enable);
     }
+
     public void StopGrap()
     {
-        if (!joint)
+        if (!_joint)
             return;
         _fireTime = Time.time + cooldown;
-        StartCoroutine(sc.StartCooldown(1, cooldown));
-        lr.positionCount = 0;
-        Destroy(joint);
-        fpm.GrapModeOff();
-        PV.RPC("ParticleOn",RpcTarget.All,false);
+        StartCoroutine(_sc.StartCooldown(1, cooldown));
+        _lr.positionCount = 0;
+        Destroy(_joint);
+        _fpm.GrapModeOff();
+        PV.RPC("ParticleOn", RpcTarget.All, false);
     }
 }

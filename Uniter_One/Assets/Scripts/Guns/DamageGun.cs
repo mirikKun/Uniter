@@ -5,16 +5,15 @@ using Photon.Pun;
 using Photon.Pun;
 public class DamageGun : Gun
 {
-    public float damage = 10f;
-    public float bulletSpeed = 40;
+    [SerializeField] private SkillController sc;
+    [SerializeField] private Transform startPoint;
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private float bulletSpeed = 40;
+    [SerializeField] private float fireRate = 0.5f;
     
-    public Transform startPoint;
-    public GameObject projectile;
-    public float fireRate = 0.5f;
-    public float _fireTime = 0f;
-    public SkillController sc;
+    private float _fireTime = 0f;
     private PhotonView PV;
-    void Awake()
+    private void Awake()
     {
         PV = GetComponent<PhotonView>();
 
@@ -28,7 +27,7 @@ public class DamageGun : Gun
         sc.OuterStartCoroutineCooldown(0,1f / fireRate);
     }
     [PunRPC]
-    void ProjectileCreate(Vector3 pos,Vector3 rot)
+    private void ProjectileCreate(Vector3 pos,Vector3 rot)
     {
         GameObject bullet =Instantiate(projectile, pos, Quaternion.LookRotation(rot));
         bullet.GetComponent<Rigidbody>().velocity = rot * bulletSpeed;

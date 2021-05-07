@@ -4,12 +4,11 @@ using UnityEngine;
 using Photon.Pun;
 public class WeaponController : MonoBehaviour
 {
-    public int selectedWeapon = 0;
-
-    public GrapGun graplinGun;
-    private Gun currentGun;
-
-    private int prevSelected;
+    [SerializeField] private int selectedWeapon = 0;
+    [SerializeField] private GrapGun graplinGun;
+    
+    private Gun _currentGun;
+    private int _prevSelected;
     private PhotonView _photonView;
     // Start is called before the first frame update
     void Start()
@@ -43,16 +42,16 @@ public class WeaponController : MonoBehaviour
         {
             graplinGun.StopGrap();
         }
-        if (!currentGun) return;
+        if (!_currentGun) return;
         if (Input.GetButton("Fire1"))
         {
-            currentGun.Shoot();
+            _currentGun.Shoot();
         }
     }
 
     private void WeaponSwitching()
     {
-        prevSelected = selectedWeapon;
+        _prevSelected = selectedWeapon;
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
             if (selectedWeapon >= transform.childCount - 1)
@@ -69,7 +68,7 @@ public class WeaponController : MonoBehaviour
                 selectedWeapon--;
         }
 
-        if (prevSelected != selectedWeapon)
+        if (_prevSelected != selectedWeapon)
             SelectWeapon();
     }
 
@@ -80,7 +79,7 @@ public class WeaponController : MonoBehaviour
         {
             weapon.gameObject.SetActive(i == selectedWeapon);
             if (i == selectedWeapon)
-                currentGun = weapon.GetComponent<Gun>();
+                _currentGun = weapon.GetComponent<Gun>();
             i++;
         }
     }

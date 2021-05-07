@@ -9,16 +9,18 @@ using UnityEngine.SceneManagement;
 
 public class OnlineManager : MonoBehaviourPunCallbacks
 {
-    public Spawner spawner;
-    public GameObject player;
+    [SerializeField] private Spawner spawner;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Perlin3D perlin;
+
     private PhotonView PV;
-    public Perlin3D perlin;
 
     private void Start()
     {
         PV = GetComponent<PhotonView>();
-        PV.RPC("AskForRoomSetting", RpcTarget.Others, PhotonNetwork.NickName);
-        if (!FillOptions.join)
+        if (FillOptions.join)
+            PV.RPC("AskForRoomSetting", RpcTarget.Others, PhotonNetwork.NickName);
+        else 
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero,
                 Quaternion.identity);
     }
@@ -32,11 +34,14 @@ public class OnlineManager : MonoBehaviourPunCallbacks
     private void AskForRoomSetting(String nickname)
     {
         PV.RPC("GetSetting", RpcTarget.Others, nickname, FillOptions.size, FillOptions.enemyCount, FillOptions.useWalls,
-            FillOptions.outerLightEnable,FillOptions.randomRoomGeneration,FillOptions.offset,FillOptions.bounce,FillOptions.multiplyIn,FillOptions.defaultRoom);
+            FillOptions.outerLightEnable, FillOptions.randomRoomGeneration, FillOptions.offset, FillOptions.bounce,
+            FillOptions.multiplyIn, FillOptions.defaultRoom);
+        
     }
 
     [PunRPC]
-    private void GetSetting(String nickname, int size, int enemyCount, bool useWalls, bool outerLight,bool random,int offset,float bounce,float multiplyIn,bool defaultRoom)
+    private void GetSetting(String nickname, int size, int enemyCount, bool useWalls, bool outerLight, bool random,
+        int offset, float bounce, float multiplyIn, bool defaultRoom)
     {
         if (PhotonNetwork.NickName != nickname)
             return;
@@ -55,12 +60,12 @@ public class OnlineManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.LogFormat("Player {0} entered room", otherPlayer.NickName);
+        Debug.LogFormat("Player {0} left room", otherPlayer.NickName);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.LogFormat("Player {0} left room", newPlayer.NickName);
+        Debug.LogFormat("Player {0} entered room", newPlayer.NickName);
     }
 
     public override void OnLeftRoom()

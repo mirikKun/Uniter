@@ -7,37 +7,37 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private Spawner spawner;
-    private GameObject player;
-    private PhotonView PV;
+    private Spawner _spawner;
+    private GameObject _player;
+    private PhotonView _pv;
+
     private void Awake()
     {
-        PV = GetComponent<PhotonView>();
+        _pv = GetComponent<PhotonView>();
     }
-    void Start()
+
+    private void Start()
     {
-        if (PV.IsMine)
+        if (_pv.IsMine)
         {
-            CreateController(); 
+            CreateController();
         }
     }
 
-    
     private void CreateController()
     {
-        spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
-        Vector3 playerPosition = spawner.GetPlayerPosition();
-        
-        player=PhotonNetwork.Instantiate("FPCharacter", playerPosition, Quaternion.identity,0,new object[]{PV.ViewID});
+        _spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+        Vector3 playerPosition = _spawner.GetPlayerPosition();
+        _player = PhotonNetwork.Instantiate("FPCharacter", playerPosition, Quaternion.identity, 0,
+            new object[] {_pv.ViewID});
     }
 
     public void Die()
     {
-        if (PV.IsMine)
+        if (_pv.IsMine)
         {
-            PhotonNetwork.Destroy(player);
+            PhotonNetwork.Destroy(_player);
             CreateController();
         }
     }
 }
- 

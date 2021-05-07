@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
 public static class FillOptions
 {
     
@@ -12,7 +9,7 @@ public static class FillOptions
     public static bool useWalls=true;
     public static bool defaultRoom=true;
 
-    public static bool join;
+    public static bool join=false;
     
     public static int offset = 0; 
     public static float multiplyIn = 0.2f;

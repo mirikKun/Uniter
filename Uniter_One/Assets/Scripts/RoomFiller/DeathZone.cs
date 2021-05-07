@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DeathZone : MonoBehaviour
 {
- private void OnTriggerEnter(Collider other)
- {
-  if (other.gameObject.CompareTag("Player"))
-  {
-
-   other.gameObject.GetComponent<FpController>().Die();
-  }
- }
- 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            other.gameObject.GetComponent<FpController>().Die();
+        }
+    }
 }

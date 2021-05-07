@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Photon.Pun;
+
 
 public class GravitySwitchGun : Gun
 {
-    public Transform player;
-    public GameObject boom;
-    public Spawner spawner;
+    [SerializeField] private Transform player;
+    [SerializeField] private GameObject boom;
+    [SerializeField] private Spawner spawner;
    
-    public Vector3 currentGravity = new Vector3(0, -1, 0);
-    public LayerMask layerMask;
-    public float gravity = 30f;
-    private bool shooted;
+    [SerializeField] private Vector3 currentGravity = new Vector3(0, -1, 0);
+    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private float gravity = 30f;
+    private bool _shot;
     
 
     public void SetPlayer(Transform newPlayer, Transform newCamera)
@@ -22,7 +20,7 @@ public class GravitySwitchGun : Gun
         player = newPlayer;
         fpCamera = newCamera;
     }
-    void Start()
+    private void Start()
     {
         spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
         Physics.gravity = currentGravity * gravity;
@@ -34,24 +32,20 @@ public class GravitySwitchGun : Gun
         Transform trans = transform;
         yield return new WaitForSeconds(time) ;
         if(!trans) yield break;
-
         Destroy(Instantiate(boom, trans.position, Quaternion.identity, player),3);
         spawner.GravityGunSpawn();
         Destroy(gameObject);
-        
     }
 
     public override void Shoot()
     {
-        if(shooted) return;
+        if(_shot) return;
         RaycastHit hit;
         if (Physics.Raycast(fpCamera.position, fpCamera.forward, out hit,200,layerMask))
         {
-            Debug.Log(hit.normal+"aaaaaaaaaaaaaaaaaaaa");
-            Debug.Log(hit.transform.gameObject+"bbbb");
             if (CheckVector(hit.normal))
                 return;
-            shooted = true;
+            _shot = true;
             Physics.gravity = -hit.normal * gravity;
             player.GetComponent<FpController>().SwitchGravity(hit.normal);
             StartCoroutine(Disappear(0));

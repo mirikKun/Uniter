@@ -1667,14 +1667,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpCamera: {fileID: 3078270767776117206}
-  damage: 10
-  bulletSpeed: 150
+  sc: {fileID: 1353684527}
   startPoint: {fileID: 3078270768108279599}
   projectile: {fileID: 1133129131981492017, guid: 96b9d7f20f00f534eaa71813793055b6,
     type: 3}
+  bulletSpeed: 150
   fireRate: 0.3
-  _fireTime: 0
-  sc: {fileID: 1353684527}
 --- !u!120 &3078270767093751360
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1848,14 +1846,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpCamera: {fileID: 3078270767776117206}
-  damage: 10
-  bulletSpeed: 85
+  sc: {fileID: 0}
   startPoint: {fileID: 2008839271}
   projectile: {fileID: 6334899800934048874, guid: fe0689b63bda99c489e493c045fe6083,
     type: 3}
+  bulletSpeed: 85
   fireRate: 10
-  _fireTime: 0
-  sc: {fileID: 0}
 --- !u!114 &4256476221689914685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2566,10 +2562,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e27535adc4e0bf4da4fc84fd25f5161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHeals: 100
   groundCheck: {fileID: 3078270768531313837}
   roofCheck: {fileID: 162232060000951628}
   mainCamera: {fileID: 3078270766941320459}
+  trail: {fileID: 6493100930887387105}
   gravity: 20
   groundMasc:
     serializedVersion: 2
@@ -2577,15 +2573,15 @@ MonoBehaviour:
   groundDistance: 0.5
   speed: 12
   jumpHeight: 10
-  healthBar: {fileID: 2637859158967602890}
-  mouseSensivity: 60
-  ivertion: -1
   blinkNear: 4
   rangeBlink: 30
-  cooldown: 2
-  gravityVelocity: {x: 0, y: 0, z: 0}
+  cooldownBlink: 2
+  maxHeals: 100
   sc: {fileID: 1353684527}
   ui: {fileID: 1829591462}
+  healthBar: {fileID: 2637859158967602890}
+  mouseSensivity: 90
+  ivertion: -1
 --- !u!143 &3078270768876445913
 CharacterController:
   m_ObjectHideFlags: 0

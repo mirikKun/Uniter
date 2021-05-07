@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
@@ -8,18 +7,18 @@ using Random = UnityEngine.Random;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
-    public Text logText;
-    public GameObject startMenu;
-    public GameObject roomCreatorMenu;
-    public Slider size;
-    public Slider enemyCount;
-    public Toggle outerLightOn;
-    public Toggle wallsOn;
-    public Toggle randomRoomSetup;
+    [SerializeField] private Text logText;
+    [SerializeField] private GameObject startMenu;
+    [SerializeField] private GameObject roomCreatorMenu;
+    [SerializeField] private Slider size;
+    [SerializeField] private Slider enemyCount;
+    [SerializeField] private Toggle outerLightOn;
+    [SerializeField] private Toggle wallsOn;
+    [SerializeField] private Toggle randomRoomSetup;
 
-    private byte playerCount = 4;
+    private byte _playerCount = 4;
 
-    void Start()
+    private void Start()
     {
         PhotonNetwork.NickName = "Player" + Random.Range(1000, 9999);
         Log("Player`s name is set to" + PhotonNetwork.NickName);
@@ -51,20 +50,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomCreatorMenu.SetActive(false);
     }
 
-    public void CreateRoom()
+    public void CreateRoom(bool defaultRoom)
     {
-        FillOptions.defaultRoom = false;
-        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions() {MaxPlayers = playerCount});
-    }
-
-    public void CreateDefaultRoom()
-    {
-        FillOptions.defaultRoom = true;
-        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions() {MaxPlayers = playerCount});
+        Log("Creating");
+        FillOptions.defaultRoom = defaultRoom;
+        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions() {MaxPlayers = _playerCount});
     }
 
     public void JoinRoom()
     {
+        Log("Joining");
         FillOptions.join = true;
         PhotonNetwork.JoinRandomRoom();
     }
